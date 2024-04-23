@@ -2,6 +2,7 @@
 
 return [
 
+    'delivery_address' => env('MAIL_DELIVERY_ADDRESS', ''),
     /*
     |--------------------------------------------------------------------------
     | Default Mailer

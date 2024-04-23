@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
+    'rural_shop_url' => env('RURAL_SHOP_URL', 'http://127.0.0.1:8000'),
     /*
     |--------------------------------------------------------------------------
     | Application Name
