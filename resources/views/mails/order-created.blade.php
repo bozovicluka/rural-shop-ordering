@@ -13,7 +13,7 @@
 <ul>
     <li><strong>ID oglasa:</strong> {{ $order['ad_id'] }}</li>
     <li><strong>Naslov Oglasa:</strong> {{ $order['ad_title'] }}</li>
-    <li><strong>Cijena:</strong> {{ $order['price'] }}</li>
+    <li><strong>Količina:</strong> {{$order['quantity']}}</li>
     @if ($order['comment'])
         <li><strong>Komentar:</strong> {{ $order['comment'] }}</li>
     @endif
@@ -22,7 +22,6 @@
     <li><strong>Ime:</strong> {{ $order['name'] }}</li>
     <li><strong>Grad:</strong> {{ $order['city'] }}</li>
     <li><strong>Adresa:</strong> {{ $order['address'] }}</li>
-    <li><strong>Poštanski Broj:</strong> {{ $order['postal_code'] }}</li>
 </ul>
 
 <h3>Više detalja možete pronaći na našoj aplikaciji.</h3>

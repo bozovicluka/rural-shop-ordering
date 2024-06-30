@@ -15,9 +15,9 @@
 <ul>
     <li><strong>Ime:</strong> {{ $order['user_name'] }}</li>
     <li><strong>Email:</strong> {{ $order['user_email'] }}</li>
-    <li><strong>Telefon:</strong> {{ $ad['phone_number'] }}</li>
-    <li><strong>Grad:</strong> {{ $ad['city'] }}</li>
-    <li><strong>Adresa:</strong> {{ $ad['address'] }}</li>
+    <li><strong>Telefon:</strong> {{ $order['user_phone_number'] }}</li>
+    <li><strong>Grad:</strong> {{ $order['user_city'] }}</li>
+    <li><strong>Adresa:</strong> {{ $order['user_address'] }}</li>
 </ul>
 
 <h3>Detalji narudžbine:</h3>
@@ -35,7 +35,6 @@
     <li><strong>Ime:</strong> {{ $order['name'] }}</li>
     <li><strong>Grad:</strong> {{ $order['city'] }}</li>
     <li><strong>Adresa:</strong> {{ $order['address'] }}</li>
-    <li><strong>Poštanski Broj:</strong> {{ $order['postal_code'] }}</li>
 </ul>
 
 <br>

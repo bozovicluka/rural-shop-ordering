@@ -16,11 +16,10 @@ class OrderDeliveryMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct($order, $comment, $ad)
+    public function __construct($order, $comment)
     {
         $this->order = $order;
         $this->comment = $comment;
-        $this->ad = $ad;
     }
 
     /**
@@ -36,7 +35,6 @@ class OrderDeliveryMail extends Mailable
             ->with([
                 'order' => $this->order,
                 'comment' => $this->comment,
-                'ad' => $this->ad,
             ]);
     }
 }

@@ -16,8 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('ad_id');
             $table->unsignedBigInteger('user_id');
             $table->string('user_name');
-            $table->string('price');
             $table->string('user_email');
+            $table->string('user_phone_number');
+            $table->string('user_city');
+            $table->string('user_address');
+            $table->string('price');
             $table->string('ad_title');
             $table->text('comment')->nullable();
             $table->boolean('is_approved')->default(false);
@@ -26,7 +29,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('city');
             $table->string('address');
-            $table->string('postal_code');
+            $table->string('quantity');
             $table->timestamps();
         });
     }

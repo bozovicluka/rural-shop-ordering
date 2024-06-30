@@ -22,19 +22,25 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ad_id' => 'required|integer',
-            'user_id' => 'required|integer',
-            'user_name' => 'required|string',
-            'price' => 'required|string',
-            'user_email' => 'required|email',
-            'ad_title' => 'required|string',
-            'comment' => 'nullable|string',
-            'email' => 'required|email',
-            'phone' => 'required|string',
-            'name' => 'required|string',
-            'city' => 'required|string',
-            'address' => 'required|string',
-            'postal_code' => 'required|string',
+            'street' => 'required|string|max:255',
+            'flat_number' => 'nullable|string|max:12',
+            'city' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:12',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'note' => 'nullable|string',
+            'order' => 'required|array',
+            'order.*.ad_id' => 'required|integer',
+            'order.*.ad_title' => 'required|string',
+            'order.*.price' => 'required|string',
+            'order.*.quantity' => 'required|integer',
+            'order.*.seller.id' => 'required|integer',
+            'order.*.seller.name' => 'required|string',
+            'order.*.seller.email' => 'required|email',
+            'order.*.seller.address' => 'required|string',
+            'order.*.seller.city' => 'nullable|string',
+            'order.*.seller.phone' => 'required|string',
         ];
     }
 }
