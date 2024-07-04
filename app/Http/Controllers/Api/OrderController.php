@@ -7,6 +7,7 @@ use App\Http\Requests\ApproveOrderRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Mail\OrderApprovedMail;
 use App\Mail\OrderCreatedMail;
+use App\Mail\OrderDeclinedMail;
 use App\Mail\OrderDeliveryMail;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
@@ -71,11 +72,22 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user_id = $request->user_id;
-        return Order::query()->where('user_id', $user_id)->get();
+        return Order::query()->where('user_id', $user_id)
+            ->orderBy('created_at', 'desc')->get();
     }
 
     public function show(Order $order)
     {
         return $order;
+    }
+
+    public function destroy(Order $order)
+    {
+        try {
+            Mail::to($order->email)->send(new OrderDeclinedMail($order));
+            $order->delete();
+        }catch (\Exception $exception){
+            Log::info($exception->getMessage());
+        }
     }
 }
