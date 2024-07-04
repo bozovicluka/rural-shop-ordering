@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Potvrda Narudžbine</title>
+    <title>Promjena statusa narudžbe</title>
 </head>
 <body>
-<h1>Potvrda Narudžbine</h1>
-<p>Čestitamo, Vaša narudžbina je odobrena!</p>
+<h1>Vaša narudžbina je odbijena.</h1>
 
 <h2>Detalji Narudžbine:</h2>
 <ul>

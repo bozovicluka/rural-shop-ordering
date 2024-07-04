@@ -7,39 +7,87 @@ use App\Http\Requests\ApproveOrderRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Mail\OrderApprovedMail;
 use App\Mail\OrderCreatedMail;
+use App\Mail\OrderDeclinedMail;
 use App\Mail\OrderDeliveryMail;
 use App\Models\Order;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
-    public function store(StoreOrderRequest $request)
+    /**
+     * @param StoreOrderRequest $request
+     * @return JsonResponse
+     */
+    public function store(StoreOrderRequest $request): JsonResponse
     {
-        $order = Order::create($request->validated());
-        Mail::to($order->user_email)->send(new OrderCreatedMail($order));
+        $data = $request->validated();
+        try {
+            DB::beginTransaction();
+            foreach ($data['order'] as $ad) {
+                $order = Order::create([
+                    'ad_id' => $ad['ad_id'],
+                    'user_id' => $ad['seller']['id'],
+                    'user_name' => $ad['seller']['name'],
+                    'user_email' => $ad['seller']['email'],
+                    'user_phone_number' => $ad['seller']['phone'],
+                    'user_city' => $ad['seller']['city'],
+                    'user_address' => $ad['seller']['address'],
+                    'price' => $ad['price'],
+                    'quantity' => $ad['quantity'],
+                    'ad_title' => $ad['ad_title'],
+                    'email' => $data['email'],
+                    'comment' => $data['note'],
+                    'phone' => $data['phone_number'],
+                    'name' => $data['first_name'] . ' ' . $data['last_name'],
+                    'city' => $data['city'],
+                    'address' => $data['street'] . ' ' . $data['flat_number'],
+                ]);
+                Mail::to($order->user_email)->send(new OrderCreatedMail($order));
+            }
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json(['message' => $exception->getMessage()], 400);
+        }
+
+        return response()->json(['message' => 'Order created successfully.']);
     }
 
     public function approve(Order $order, ApproveOrderRequest $request)
     {
-        //fetch user from other application
-        $response = Http::get(config('app.rural_shop_url') . '/api/ads/' . $order->ad_id);
-        $ad = $response->json();
         $comment = $request->comment;
         $order->update(['is_approved' => true]);
-        Mail::to($order->email)->send(new OrderApprovedMail($order));
-        Mail::to(config('mail.delivery_address'))->send(new OrderDeliveryMail($order, $comment, $ad));
+        try {
+            Mail::to($order->email)->send(new OrderApprovedMail($order));
+            Mail::to(config('mail.delivery_address'))->send(new OrderDeliveryMail($order, $comment));
+        }catch (\Exception $exception){
+            Log::info($exception->getMessage());
+        }
     }
 
     public function index(Request $request)
     {
         $user_id = $request->user_id;
-        return Order::query()->where('user_id', $user_id)->get();
+        return Order::query()->where('user_id', $user_id)
+            ->orderBy('created_at', 'desc')->get();
     }
 
     public function show(Order $order)
     {
         return $order;
+    }
+
+    public function destroy(Order $order)
+    {
+        try {
+            Mail::to($order->email)->send(new OrderDeclinedMail($order));
+            $order->delete();
+        }catch (\Exception $exception){
+            Log::info($exception->getMessage());
+        }
     }
 }

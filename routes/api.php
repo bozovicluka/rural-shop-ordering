@@ -22,5 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/orders', [OrderController::class, 'index']);
 Route::get('/orders/{order}', [OrderController::class, 'show']);
 Route::post('/orders', [OrderController::class, 'store']);
-Route::patch('/orders/{order}/approve', [OrderController::class, 'approve']);
+Route::post('/orders/{order}/approve', [OrderController::class, 'approve']);
+Route::delete('orders/{order}', [OrderController::class, 'destroy']);
 

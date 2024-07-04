@@ -3,23 +3,19 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderDeliveryMail extends Mailable
+class OrderDeclinedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($order, $comment)
+    public function __construct($order)
     {
         $this->order = $order;
-        $this->comment = $comment;
     }
 
     /**
@@ -30,11 +26,10 @@ class OrderDeliveryMail extends Mailable
     public function build()
     {
         $this->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Narudžbina')
-            ->view('mails.order-delivery')
+            ->subject('Vaša narudžbina je odbijena')
+            ->view('mails.order-declined')
             ->with([
                 'order' => $this->order,
-                'comment' => $this->comment,
             ]);
     }
 }
